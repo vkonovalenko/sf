@@ -2,10 +2,10 @@ import asyncio
 import json
 from aiohttp.web import (Application, Response, WebSocketResponse, WSMsgType)
 
-from modules.request.classes.Websocket import Websocket
-from modules.locators.middleware.classes.File import File as MiddlewareFile
-from modules.locators.route.classes.File import File as RouteFile
-from modules.route.classes.Websocket import Websocket as aaaaaaa
+from appname.modules.request.classes.Websocket import Websocket
+from appname.modules.locators.middleware.classes.File import File as MiddlewareFile
+from appname.modules.locators.route.classes.File import File as RouteFile
+from appname.modules.route.classes.Websocket import Websocket as aaaaaaa
 
 
 async def wshandler(request):
@@ -22,7 +22,7 @@ async def wshandler(request):
                 websocket.handle_params(msg.data)
                 data = websocket.get_data()
 
-                routes_file = RouteFile('routes.test', 'config')
+                routes_file = RouteFile('routes.routes', 'routes')
 
                 # .get_routes()
 

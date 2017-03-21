@@ -1,5 +1,4 @@
-
-from modules.IFile import IFile
+from appname.modules.locators.IFile import IFile
 
 
 class File(IFile):

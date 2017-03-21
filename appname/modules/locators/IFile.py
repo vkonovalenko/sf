@@ -1,8 +1,8 @@
 import importlib
-from abc import ABC
+from appname.modules.locators.ILocator import ILocator
 
 
-class IFile(ABC):
+class IFile(ILocator):
 
     _file_data = {}
 

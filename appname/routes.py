@@ -1,18 +1,18 @@
-from modules.route.classes.Http import Http
-from modules.route.classes.Websocket import Websocket
+from appname.modules.route.classes.Http import Http
+from appname.modules.route.classes.Websocket import Websocket
 
-from modules.controller.Factory import Factory as ControllerFactory
-from modules.middleware.Factory import Factory as MiddlewaresFactory
+from appname.modules.controller.Factory import Factory as ControllerFactory
+from appname.modules.middleware.Factory import Factory as MiddlewaresFactory
 
-from modules.locators.controller.classes.File import File as ControllerFile
-from modules.locators.middleware.classes.File import File as MiddlewareFile
+from appname.modules.locators.controller.classes.File import File as ControllerFile
+from appname.modules.locators.middleware.classes.File import File as MiddlewareFile
 
 
-controllers = ControllerFactory(ControllerFile('config.controllers', 'classes'))
-middlewares = MiddlewaresFactory(MiddlewareFile('config.middlewares', 'classes'))
+controllers = ControllerFactory(ControllerFile('config.locators.file.controllers', 'controllers'))
+middlewares = MiddlewaresFactory(MiddlewareFile('config.locators.file.middlewares', 'middlewares'))
 
-test = [
-    Http('post|get:/api/user/profile', controllers.get('User'), middlewares.get(['Auth', 'Admin'])),
+routes = [
+    Http('get:/api/user/test', controllers.get('User'), middlewares.get(['Auth'])),
 
     Websocket('authorize', controllers.get('Socket'), middlewares.get(['A', 'B']))
 ]
