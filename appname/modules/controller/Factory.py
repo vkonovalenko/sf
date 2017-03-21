@@ -1,4 +1,4 @@
-from modules.locators.controller.IControllerLocator import IControllerLocator
+from appname.modules.locators.controller.IControllerLocator import IControllerLocator
 
 
 class Factory:

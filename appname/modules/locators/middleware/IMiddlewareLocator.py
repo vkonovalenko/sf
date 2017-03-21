@@ -1,5 +1,4 @@
-from abc import ABC, abstractmethod
-from modules.locators.ILocator import ILocator
+from appname.modules.locators.ILocator import ILocator
 
 
 class IMiddlewareLocator(ILocator):

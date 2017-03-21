@@ -1,4 +1,4 @@
-from modules.request.IRequest import IRequest
+from appname.modules.request.IRequest import IRequest
 from urllib.parse import urlparse, parse_qsl
 
 

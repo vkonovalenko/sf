@@ -1,4 +1,4 @@
-from modules.route.IRoute import IRoute
+from appname.modules.route.IRoute import IRoute
 
 
 class Websocket(IRoute):
