@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from appname.modules.locators.route.IRouteLocator import IRouteLocator
+from appname.modules.route.locators.IRouteLocator import IRouteLocator
 
 
 class IRoute(ABC):

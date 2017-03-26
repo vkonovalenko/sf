@@ -1,4 +1,4 @@
-from appname.modules.locators.middleware.IMiddlewareLocator import IMiddlewareLocator
+from appname.modules.middleware.locators.IMiddlewareLocator import IMiddlewareLocator
 
 
 class Factory:
