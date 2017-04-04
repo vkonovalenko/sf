@@ -2,4 +2,6 @@ from appname.modules.route.IRoute import IRoute
 
 
 class Websocket(IRoute):
-    pass
+
+    def handle(self):
+        pass
