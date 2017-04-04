@@ -5,12 +5,12 @@ from appname.modules.Factory import Factory
 from appname.modules.locators.File import File as FileLocator
 
 
-controllers = Factory(FileLocator('appname.config.locators.file.controllers', 'controllers'))
-middlewares = Factory(FileLocator('appname.config.locators.file.middlewares', 'middlewares'))
+controllers = Factory(FileLocator('appname.config.locators.controllers', 'controllers'))
+middlewares = Factory(FileLocator('appname.config.locators.middlewares', 'middlewares'))
 
 routes = [
-    Http('get:/api/user/test', controllers.get('User'), middlewares.get('Auth')),
+    # Http('get:/api/user/test', controllers.get('User'), middlewares.get(['Auth', 'Auth2'])),
 
-    Websocket('authorize', controllers.get('User'), middlewares.get('Auth'))
+    Websocket('authorize', controllers.get('User'), middlewares.get(['Auth', 'Auth2'])),
     # Websocket('authorize', controllers.get('Socket'), middlewares.get('A'))
 ]

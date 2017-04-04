@@ -1,42 +1,41 @@
+#!/usr/bin/env python3
+"""Example for aiohttp.web websocket server
+"""
+
 import asyncio
 import json
 from aiohttp.web import (Application, Response, WebSocketResponse, WSMsgType)
 
-from appname.modules.request.classes.Websocket import Websocket
-from appname.modules.locators.middleware.classes.File import File as MiddlewareFile
-from appname.modules.locators.route.classes.File import File as RouteFile
-from appname.modules.route.classes.Websocket import Websocket as aaaaaaa
+from appname.modules.locators.File import File as LocatorFile
 
 
 async def wshandler(request):
     resp = WebSocketResponse()
     await resp.prepare(request)
+
     try:
-        # if resp not in request.app['sockets']:
         request.app['sockets'].append(resp)
 
         async for msg in resp:
             if msg.type == WSMsgType.TEXT:
-
-                websocket = Websocket(request)
-                websocket.handle_params(msg.data)
-                data = websocket.get_data()
-
-                routes_file = RouteFile('routes.routes', 'routes')
-
-                # .get_routes()
-
-                # command = websocket.command()
-
-                # 1. Локаторы хранят классы в формате ['Alias': class] (кроме модуля route)
-                # 2. Каждая фабрика должна иметь экземпляр локатора, для доступа к классу по алиасу
-                # 3. Элементы роута должны объявляться в виде экземпляра класса (Http либо Websocket)
-                # 4. Где влепить Фасад?
-
+                # move it to a class
                 try:
+                    json_data = json.loads(msg.data)
+                except:
+                    json_data = {}
+
+                data = json_data.get('data')
+                if data is None or type(data) is not dict:
+                    data = {}
+                # ---------
+                try:
+                    routes = LocatorFile('appname.routes', 'routes')
+                    route_objects = routes.get_classes()
+
                     from sockets.routes.routes import routes_map
                     command = json_data.get('command')
                     command_not_found = True
+
                     if type(command) is str and command:
                         for route in routes_map:
                             if command == route[0]:

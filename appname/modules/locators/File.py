@@ -1,5 +1,5 @@
 import importlib
-from appname.modules.abstracts.ILocator import ILocator
+from appname.modules.locators.ILocator import ILocator
 
 
 class File(ILocator):

@@ -1,5 +1,5 @@
 from abc import ABC
-from appname.modules.abstracts.ILocator import ILocator
+from appname.modules.locators.ILocator import ILocator
 
 
 class Factory(ABC):
