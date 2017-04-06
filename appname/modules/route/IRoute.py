@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from appname.modules import middleware
 from appname.modules.locators.ILocator import ILocator
+from appname.modules.controller.Controller import Controller
 
 
 class IRoute(ABC):
@@ -10,7 +11,7 @@ class IRoute(ABC):
     _handler = None
     _middlewares = []
 
-    def __init__(self, command, handler: ILocator, middlewares):
+    def __init__(self, command, handler: Controller, middlewares):
         self._command = command
         self._handler = handler
         if middlewares:
