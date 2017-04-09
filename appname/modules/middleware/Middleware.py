@@ -4,6 +4,7 @@ from appname.modules.controller.Controller import Controller
 
 class Middleware(ABC):
 
+    __passed = True
     _handler = None
 
     def __init__(self, handler: Controller):
@@ -15,3 +16,12 @@ class Middleware(ABC):
     @abstractmethod
     def handle(self):
         pass
+
+    def set_passed(self):
+        self.__passed = True
+
+    def set_failed(self):
+        self.__passed = False
+
+    def is_passed(self):
+        return self.__passed
