@@ -8,7 +8,10 @@ class Middleware(ABC):
     _handler = None
 
     def __init__(self, handler: Controller):
-        self._handler = Controller
+        if isinstance(handler, Controller):
+            self._handler = Controller
+        else:
+            raise Exception('handler is not instance of Controller class.')
 
     def get_handler(self):
         return self._handler
