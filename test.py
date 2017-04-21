@@ -1,4 +1,5 @@
 from appname.modules.locators.File import File as LocatorFile
+from appname.modules.request.classes.Websocket import Websocket
 
 
 routes = LocatorFile('appname.routes', 'routes')
@@ -12,7 +13,10 @@ route_objects = routes.get_classes()
 # it will be separate module
 # name of this module "Request"
 # and Http command must be compatible only with routes Http etc and maybe it's better to place them together
-current_command = 'test'
+# make classes for responses and requests Json, Xml etc
+
+req = Websocket('request')
+current_command = 'test' #req.command()
 
 for route in route_objects:
     if route.get_command() == current_command:
