@@ -1,23 +1,22 @@
 from appname.modules.request.IRequest import IRequest
+from aiohttp.web import WSMsgType
 import json
 
 # @TODO: delete dependency from concrete Json format
 
 class Websocket(IRequest):
 
+    # here request is msg from code "async for msg in resp:" in websocket server
     def init(self):
-        pass
+        if self._request.type == WSMsgType.TEXT:
+            try:
+                data = json.loads(self._request.data)
+            except:
+                data = {}
+            self._data = data
 
     def handle_params(self, params=None):
-        try:
-            self._data = json.loads(params)
-        except:
-            pass
-
-        data = self._data.get('data')
-        if data is None or type(data) is not dict:
-            data = {}
-        self._data = data
+        pass
 
     def command(self):
         return self._data.get('command')
