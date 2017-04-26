@@ -36,3 +36,6 @@ class Http(IRequest):
             self.json_data = await self._request.json()
         except:
             pass
+
+    def get_command(self):
+        return 123
