@@ -11,3 +11,6 @@ class File(ILocator):
     def __load_from_file(self, file_path, var_name):
         module = importlib.import_module(file_path, var_name)
         self._classes = getattr(module, var_name)
+
+    def get(self, alias):
+        return self._classes.get(alias)

@@ -10,6 +10,10 @@ class ILocator(ABC):
     def __init__(self):
         pass
 
+    @abstractmethod
+    def get(self, alias):
+        pass
+
     def get_classes(self):
         return self._classes
 
