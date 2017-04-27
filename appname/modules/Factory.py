@@ -13,7 +13,7 @@ class Factory(ABC):
         if type(alias) is list:
             return self.__get_many(alias)
         else:
-            result = self.__locator.get_classes().get(alias)
+            result = self.__locator.get(alias)
             if result is not None:
                 return result
             else:
