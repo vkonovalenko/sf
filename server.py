@@ -4,11 +4,9 @@ import datetime
 import importlib
 import json
 from os.path import expanduser
-from urllib.parse import urlparse, parse_qsl
 
 from aiohttp import hdrs
 from aiohttp import web
-from aiohttp_swagger import *
 
 App = web.Application()
 request_object = {}
@@ -17,11 +15,11 @@ request_object = {}
 # @TODO: it doesn't work with aioredis
 # asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
-
 from appname.modules.request.classes.Http import Http
 from appname.modules.locators.File import File as LocatorFile
 
 
+# @TODO: move it to the class
 async def handle(request):
     try:
         http = Http(request)

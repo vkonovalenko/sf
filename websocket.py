@@ -9,6 +9,8 @@ from appname.modules.request.classes.Websocket import Websocket
 from aiohttp import web
 
 
+# @TODO: move it to the class
+# we need have posibility to create few handlers more easy
 async def wshandler(request):
     resp = WebSocketResponse()
     await resp.prepare(request)
