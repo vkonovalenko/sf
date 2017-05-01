@@ -18,9 +18,5 @@ class IRequest(ABC):
         pass
 
     @abstractmethod
-    def handle_params(self, params=None):
-        pass
-
-    @abstractmethod
     def get_command(self):
         pass

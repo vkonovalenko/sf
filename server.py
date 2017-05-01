@@ -10,8 +10,6 @@ from aiohttp import hdrs
 from aiohttp import web
 from aiohttp_swagger import *
 
-from core.helpers.Config import Config
-
 App = web.Application()
 request_object = {}
 
@@ -20,17 +18,19 @@ request_object = {}
 # asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
-from modules.request.classes.Http import Http
+from appname.modules.request.classes.Http import Http
+from appname.modules.locators.File import File as LocatorFile
 
 
 async def handle(request):
     try:
         http = Http(request)
-        http.handle_params()
-        get_params = http.get_params
-        await http.set_params_async()
-        url = http.get_data()
 
+        # if request for file upload - not parse params
+        if False:
+            http.not_parse_params()
+
+        url = http.get_url()
 
 
         # set current_route as it was added in request_object
@@ -55,8 +55,6 @@ async def handle(request):
 
             # create controller object
             instance = controller_class(request)
-            # init get parameters
-            instance.set_get_params(get_params)
             # check if controller is upload - we need other handler
 
             # check for existing controller's action
@@ -121,30 +119,7 @@ async def handle(request):
         return send_response(web, instance)
 
     except Exception as exception:
-        from app.helpers.Mailer import Mailer
-        from time import gmtime, strftime
-        import traceback
-        import random
-        import string
-
-        for email in Config.get('admin_emails'):
-            mailer = Mailer()
-            mailer.to(email)
-            mailer.subject('Exception Error')
-            raw_html = ''
-            for raw in traceback.format_exc().splitlines():
-                raw_html += raw + '</br >'
-            html = '<html><body>' + raw_html + '</body></html>'
-            s = string.ascii_lowercase + string.digits
-            filename = strftime("%Y-%m-%d_%H:%M:%S_", gmtime()) + ''.join(random.sample(s, 10)) + '.html'
-            file_exception = open('/home/dev/dev/static/exceptions/' + filename, 'w')
-            file_exception.write(html)
-            file_exception.close()
-            html_msg = '<html><body><a href="http://46.101.254.89/static/exceptions/' \
-                       + filename + '">' + str(exception) + '</a></body></html>'
-            mailer.html(html_msg)
-            mailer.send()
-        return web.Response(status=500)
+        raise Exception('Unknown exception.')
 
 
 def send_response(web, controller_object):
@@ -187,16 +162,20 @@ def error_handler(overrides):
     return middleware
 
 
-def handle_route(route_element):
-    exception_message = 'Invalid routes settings. Please check __your_app_/routes/routes.py'
-    if len(route_element) in range(2, 4):
-        route_params, controller_class = route_element[0].split(':'), route_element[1]
+def handle_route(route):
+    # @TODO: make message with file location
+    exception_message = 'Invalid routes settings.'
+
+    route = route.get_command()
+
+    if len(route) in range(2, 4):
+        route_params, controller_class = route[0].split(':'), route[1]
         if len(route_params) in range(2, 4):
             method, route = route_params[0], route_params[1]  # route = /api/v1/home/{action}
             check_routes(route)
             middlewares = []
-            if len(route_element) == 3:
-                middlewares = route_element[2]
+            if len(route) == 3:
+                middlewares = route[2]
             request_object[route] = (controller_class, middlewares)
             if method == 'get':
                 App.router.add_get(route, handle)
@@ -226,30 +205,10 @@ def check_routes(route_string):
 
 
 # # handle all defined routes in http/app/routes/routes.py
-import app.routes.routes as routes
-for route_element in routes.routes_map:
-    handle_route(route_element)
+routes = LocatorFile('appname.routes', 'routes')
+route_objects = routes.get_classes()
+for route in route_objects:
+    if isinstance(route, Http):
+        handle_route(route)
 
-swaggerDescription = "Description of api for mobile developers."
-# @TODO: get it from config app title
-swaggerTitle = "aiohttp framework"
-
-# @TODO: get swagger url from config
-setup_swagger(App, swagger_from_file="swagger.yaml", swagger_url="/api/v1/doc", description=swaggerDescription,
-              title=swaggerTitle)
-
-
-# App.router.add_get('/', handle)
-# App.router.add_get('/{name}', handle)
-
-
-# add middlewares for appliction
-def setup_middlewares(App):
-    print('errors setup')
-    error_middleware = error_handler(Config.get("errors"))
-    App.middlewares.append(error_middleware)
-
-
-# application entry point
-setup_middlewares(App)
-# web.run_app(App, port=8001)
+web.run_app(App, port=8001)

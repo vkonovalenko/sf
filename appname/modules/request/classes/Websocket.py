@@ -13,8 +13,5 @@ class Websocket(IRequest):
             data = {}
         self._data = data
 
-    def handle_params(self, params=None):
-        pass
-
     def get_command(self):
         return self._data.get('command')
