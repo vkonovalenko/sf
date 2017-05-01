@@ -22,8 +22,10 @@ async def wshandler(request):
                     req = Websocket(msg)
                     routes = LocatorFile('appname.routes', 'routes')
                     route_objects = routes.get_classes()
+                    route_exists = False
                     for route in route_objects:
                         if route.get_command() == req.get_command():
+                            route_exists = True
                             handler_class = route.get_handler()
                             handler = handler_class('request')
 
@@ -36,6 +38,8 @@ async def wshandler(request):
 
                             if middlewares_passed:
                                 handler.execute_command(route.get_command())
+                    if route_exists is False:
+                        raise Exception('Route ' + route.get_command + ' does not exists.')
                 except Exception as e:
                     handler.make_response({"error": "exception"}, str(e), resp)
             else:
