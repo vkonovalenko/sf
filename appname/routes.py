@@ -9,7 +9,7 @@ controllers = Factory(FileLocator('appname.config.locators.controllers', 'contro
 middlewares = Factory(FileLocator('appname.config.locators.middlewares', 'middlewares'))
 
 routes = [
-    # Http('get:/api/user/test', controllers.get('User'), middlewares.get(['Auth', 'Auth2'])),
+    Http('get:/api/user/test', controllers.get('User'), middlewares.get(['Auth', 'Auth2'])),
 
     Websocket('test', controllers.get('User'), middlewares.get(['Auth', 'Auth2'])),
     # Websocket('authorize', controllers.get('Socket'), middlewares.get('A'))

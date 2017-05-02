@@ -15,6 +15,7 @@ request_object = {}
 # @TODO: it doesn't work with aioredis
 # asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
+from appname.modules.route.classes.Http import Http as HttpRoute
 from appname.modules.request.classes.Http import Http
 from appname.modules.locators.File import File as LocatorFile
 
@@ -164,31 +165,35 @@ def handle_route(route):
     # @TODO: make message with file location
     exception_message = 'Invalid routes settings.'
 
-    route = route.get_command()
+    route_url = route.get_command()
 
-    if len(route) in range(2, 4):
-        route_params, controller_class = route[0].split(':'), route[1]
-        if len(route_params) in range(2, 4):
-            method, route = route_params[0], route_params[1]  # route = /api/v1/home/{action}
-            check_routes(route)
-            middlewares = []
-            if len(route) == 3:
-                middlewares = route[2]
-            request_object[route] = (controller_class, middlewares)
+    methods = route.get_methods().split('|')
+
+    if len(methods):
+        # method, route_url = route_url_params[0], route_url_params[1]  # route_url = /api/v1/home/{action}
+        check_routes(route_url)
+
+        # delete it?
+        # middlewares = []
+        # if len(route_url) == 3:
+        #     middlewares = route_url[2]
+        # request_object[route_url] = (controller_class, middlewares)
+
+        controller_class = route.get_handler()
+
+        for method in methods:
             if method == 'get':
-                App.router.add_get(route, handle)
+                App.router.add_get(route_url, handle)
             elif method == 'post':
-                App.router.add_post(route, handle)
+                App.router.add_post(route_url, handle)
             elif method == 'options&post':
-                App.router.add_route(hdrs.METH_OPTIONS, route, handle)
-                App.router.add_post(route, handle)
+                App.router.add_route_url(hdrs.METH_OPTIONS, route_url, handle)
+                App.router.add_post(route_url, handle)
             elif method == 'any':
-                App.router.add_get(route, handle)
-                App.router.add_post(route, handle)
+                App.router.add_get(route_url, handle)
+                App.router.add_post(route_url, handle)
             else:
                 raise Exception('Runtime error: routes must contain only get:|post:|options:|any: prefixes')
-        else:
-            raise Exception(exception_message)
     else:
         raise Exception(exception_message)
 
@@ -206,7 +211,7 @@ def check_routes(route_string):
 routes = LocatorFile('appname.routes', 'routes')
 route_objects = routes.get_classes()
 for route in route_objects:
-    if isinstance(route, Http):
+    if isinstance(route, HttpRoute):
         handle_route(route)
 
 web.run_app(App, port=8001)
