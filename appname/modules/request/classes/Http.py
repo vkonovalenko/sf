@@ -9,6 +9,8 @@ class Http(IRequest):
     __parse_params = True
     __command = None
     __req_methods = None
+    __action = None
+
     get_params = {}
     post_params = {}
     json_data = {}
@@ -40,6 +42,7 @@ class Http(IRequest):
             self.__req_methods = url_params[0]
             command = url_params[1]
         self.__command = command
+        self.__action = command.split('/').pop()
 
     async def set_params_async(self):
         try:
@@ -47,17 +50,17 @@ class Http(IRequest):
                 self._request.post(),
                 self._request.json()
             )
+            #@TODO: fix it
+            self._data = self.post_params
             # self.post_params = await self._request.post()
         except:
             pass
 
-        # try:
-        #     self.json_data = await self._request.json()
-        # except:
-        #     pass
-
     def get_command(self):
         return self.__command
+
+    def get_action(self):
+        return self.__action
 
     def allowed_methods(self):
         return self.__req_methods

@@ -29,7 +29,7 @@ async def wshandler(request):
                         if route.get_command() == req.get_command():
                             route_exists = True
                             handler_class = route.get_handler()
-                            handler = handler_class('request')
+                            handler = handler_class(req)
 
                             middlewares_passed = True
                             for middleware_class in route.get_middlewares():
